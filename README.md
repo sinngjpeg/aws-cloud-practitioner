@@ -31,6 +31,17 @@ Todo o conteúdo detalhado do curso também está organizado em um **GitBook** q
 
 ---
 
+## 🧠 Quizzes para Revisão
+
+Para ajudar a fixar os conceitos e memorizar o conteúdo estudado, criei alguns quizzes. Sinta-se à vontade para testar seus conhecimentos!
+
+1.  **Quiz 1: Descomplicando AWS: Nuvem e Redes**
+    * Plataforma: Kahoot!
+    * Tópicos: Fundamentos da Nuvem, Conceitos de Rede.
+    * 🔗 [Acessar o Quiz](https://create.kahoot.it/share/quiz-descomplicando-aws-nuvem-e-redes/393369a5-46ea-4e86-9a01-b4b6530369c8)
+
+---
+
 ## 📌 Conteúdos Estudados
 
 - [x] Fundamentos da AWS
