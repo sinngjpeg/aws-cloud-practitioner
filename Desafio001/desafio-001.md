@@ -8,7 +8,8 @@ Este projeto apresenta uma arquitetura simplificada de armazenamento e processam
 
 O diagrama representa o fluxo básico de interação entre um **usuário** e uma **aplicação hospedada na AWS**, desde o envio de um arquivo até seu armazenamento e registro no banco de dados.
 
-![Diagrama da arquitetura AWS](Diagramas/FLUXOGRAMADESAFIO-001.png)
+![Diagrama da arquitetura AWS](FLUXOGRAMA-EBS-DESAFIO-001.png)
+
 
 ---
 
