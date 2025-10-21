@@ -1,19 +1,15 @@
-# ☁️ Arquitetura Serverless AWS – Upload e Processamento Automático de Arquivos
+# Arquitetura Serverless AWS – Upload e Processamento Automático de Arquivos
 
 Este projeto demonstra uma arquitetura **serverless** construída na **Amazon Web Services (AWS)** para realizar **upload, processamento e armazenamento de informações** de forma automatizada, sem a necessidade de gerenciar servidores.
 
----
-
-## 🧩 Visão Geral
+## Visão Geral
 
 O fluxo inicia com o **envio de um arquivo** para o serviço **Amazon S3**, que aciona automaticamente uma **função Lambda** desenvolvida em **Node.js**.  
 Essa função processa os dados e armazena as informações no **banco de dados DynamoDB**.
 
 ![Fluxo Serverless AWS](FLUXOGRAMA-S3-DESAFIO-001.png)
 
----
-
-## ⚙️ Componentes Principais
+## Componentes Principais
 
 ### 📁 Sistema de Arquivos / Usuário
 Origem dos arquivos a serem enviados.  
@@ -40,7 +36,6 @@ Utilizado para armazenar:
 - Logs de processamento;
 - Resultados gerados pela função Lambda.
 
----
 
 ## 🔄 Fluxo do Processo
 
@@ -50,7 +45,6 @@ Utilizado para armazenar:
 4. O **DynamoDB** armazena as informações relevantes sobre o arquivo.  
 5. (Opcional) A Lambda pode enviar uma notificação, log ou resposta ao usuário.
 
----
 
 ## 🚀 Benefícios da Arquitetura
 
@@ -79,7 +73,3 @@ Utilizado para armazenar:
 - [Amazon DynamoDB – Introdução](https://docs.aws.amazon.com/pt_br/amazondynamodb/latest/developerguide/Introduction.html)  
 - [AWS CLI – Ferramenta de Linha de Comando](https://docs.aws.amazon.com/pt_br/cli/latest/userguide/cli-chap-welcome.html)  
 
----
-
-💡 **Resumo:**  
-Esse projeto representa uma **pipeline serverless** moderna na AWS — onde o armazenamento (S3), processamento (Lambda) e persistência (DynamoDB) funcionam de forma integrada e automatizada, sem servidores, garantindo eficiência e escalabilidade.
