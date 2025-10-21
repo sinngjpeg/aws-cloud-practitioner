@@ -1,4 +1,4 @@
-# Site Estático AWS - Free Tier
+# Site Estático AWS - CloudFormation - Free Tier
 
 Este projeto demonstra como criar e hospedar um site estático na AWS usando apenas recursos do Free Tier, com foco em automação e boas práticas de infraestrutura como código.
 
