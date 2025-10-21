@@ -1,11 +1,23 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Site Estático S3 Free Tier
+Description: Site Estático S3 Free Tier - AWS Cloud Practitioner
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: "meu-site-estatico"
+    Description: Nome do projeto para identificação
+  
+  Environment:
+    Type: String
+    Default: "dev"
+    AllowedValues: ["dev", "prod"]
+    Description: Ambiente de deploy
 
 Resources:
   MeuSiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "meu-site-estatico-${AWS::AccountId}-${AWS::Region}"
+      BucketName: !Sub "${ProjectName}-${Environment}-${AWS::AccountId}-${AWS::Region}"
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -14,12 +26,24 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
+      VersioningConfiguration:
+        Status: Suspended
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: CostCenter
+          Value: "FreeTier"
+        - Key: Purpose
+          Value: "StaticWebsite"
 
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref MeuSiteBucket
       PolicyDocument:
+        Version: "2012-10-17"
         Statement:
           - Sid: PublicReadGetObject
             Effect: Allow
@@ -31,6 +55,23 @@ Outputs:
   SiteURL:
     Description: "URL do site estático"
     Value: !GetAtt MeuSiteBucket.WebsiteURL
+    Export:
+      Name: !Sub "${AWS::StackName}-SiteURL"
+  
   BucketName:
     Description: "Nome do bucket S3"
     Value: !Ref MeuSiteBucket
+    Export:
+      Name: !Sub "${AWS::StackName}-BucketName"
+  
+  BucketDomainName:
+    Description: "Domain name do bucket S3"
+    Value: !GetAtt MeuSiteBucket.DomainName
+  
+  Region:
+    Description: "Região AWS onde o site foi criado"
+    Value: !Ref "AWS::Region"
+  
+  FreeTierStatus:
+    Description: "Status do Free Tier"
+    Value: "✅ Todos os recursos estão dentro do Free Tier"

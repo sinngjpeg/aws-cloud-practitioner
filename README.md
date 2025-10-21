@@ -15,7 +15,7 @@ AWS-Cloud-Practitioner/
 ├─ README.md        <- Este arquivo
 ├─ Desafios/        <- Desafios e exercícios práticos
 └─ GitBook/         <- Link para o GitBook criado
-````
+```
 
 ## 📖 GitBook
 
@@ -30,9 +30,9 @@ Todo o conteúdo detalhado do curso também está organizado em um **GitBook** q
 Para ajudar a fixar os conceitos e memorizar o conteúdo estudado, criei alguns quizzes. Sinta-se à vontade para testar seus conhecimentos!
 
 1.  **Quiz 1: Descomplicando AWS: Nuvem e Redes**
-    * Plataforma: Kahoot!
-    * Tópicos: Fundamentos da Nuvem, Conceitos de Rede.
-    * 🔗 [Acessar o Quiz](https://create.kahoot.it/share/quiz-descomplicando-aws-nuvem-e-redes/393369a5-46ea-4e86-9a01-b4b6530369c8)
+    - Plataforma: Kahoot!
+    - Tópicos: Fundamentos da Nuvem, Conceitos de Rede.
+    - 🔗 [Acessar o Quiz](https://create.kahoot.it/share/quiz-descomplicando-aws-nuvem-e-redes/393369a5-46ea-4e86-9a01-b4b6530369c8)
 
 ---
 
@@ -40,8 +40,8 @@ Para ajudar a fixar os conceitos e memorizar o conteúdo estudado, criei alguns 
 
 - [x] Fundamentos da AWS
 - [x] Conceitos de Nuvem
-- [X] IAM
-- [X] IAM Policies
+- [x] IAM
+- [x] IAM Policies
 - [ ] Serviços Essenciais: EC2, S3, RDS, Lambda
 - [ ] Segurança e Conformidade na AWS
 - [ ] Arquitetura de Soluções na Nuvem
@@ -58,4 +58,3 @@ Para ajudar a fixar os conceitos e memorizar o conteúdo estudado, criei alguns 
 - AWS Well-Architected Framework
 
 ---
-

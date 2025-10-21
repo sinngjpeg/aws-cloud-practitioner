@@ -1,0 +1,67 @@
+# Arquivos de configuração local
+.env
+*.env
+
+# Credenciais AWS (NUNCA commitar)
+.aws/
+credentials
+config
+*.pem
+*.key
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (se houver)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Arquivos de build
+build/
+dist/
+out/
+
+# Arquivos de configuração local
+.env
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Credenciais AWS (nunca commitar)
+.aws/
+credentials
+config
+
+# Arquivos de backup
+*.bak
+*.backup
