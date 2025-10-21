@@ -65,12 +65,3 @@ Para ajudar a fixar os conceitos e memorizar o conteúdo estudado, criei alguns 
 
 ---
 
-## ⚡ Observações
-
-Este repositório tem como objetivo servir como referência pessoal e estudo contínuo. Fique à vontade para sugerir melhorias ou adicionar materiais úteis através de Pull Requests.
-
----
-
-## 📄 Licença
-
-Este projeto está licenciado sob a licença **MIT** - consulte o arquivo `LICENSE` para mais detalhes.
