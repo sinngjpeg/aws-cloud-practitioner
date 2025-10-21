@@ -26,7 +26,8 @@ O fluxo é composto pelas seguintes etapas:
 1. Crie as funções Lambda no console da AWS com os códigos fornecidos.
 2. Copie o JSON do workflow e importe no Step Functions.
 3. Execute a State Machine com o seguinte **input** de teste:
-   ```json
+
+```json
  {
   "pedidoId": "123",
   "nomeCliente": "Ingrid",
