@@ -2,13 +2,9 @@
 
 Este repositório reúne todos os conteúdos estudados durante o curso **AWS Cloud Practitioner**. Aqui você encontrará resumos, anotações, exercícios e links para materiais de referência, incluindo meu **GitBook** sobre o assunto.
 
----
-
 ## 📚 Sobre o Curso
 
 O curso **AWS Cloud Practitioner** fornece conhecimentos fundamentais sobre a AWS, cobrindo conceitos de nuvem, arquitetura, segurança, serviços essenciais e práticas recomendadas para atuar com soluções na nuvem AWS.
-
----
 
 ## 📝 Estrutura do Repositório
 
