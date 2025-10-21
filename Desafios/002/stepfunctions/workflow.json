@@ -1,0 +1,55 @@
+{
+    "Comment": "Fluxo de Processamento de Pedidos",
+    "StartAt": "ValidarPedido",
+    "States": {
+        "ValidarPedido": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:validar_pedido",
+            "Next": "RegistrarPedido",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "NotificarErro"
+                }
+            ]
+        },
+        "RegistrarPedido": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:registrar_pedido",
+            "Next": "ProcessarPagamento",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "NotificarErro"
+                }
+            ]
+        },
+        "ProcessarPagamento": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:processar_pagamento",
+            "Next": "NotificarSucesso",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "NotificarErro"
+                }
+            ]
+        },
+        "NotificarSucesso": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:notificar_sucesso",
+            "End": true
+        },
+        "NotificarErro": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:notificar_erro",
+            "End": true
+        }
+    }
+}
