@@ -36,7 +36,6 @@ Utilizado para armazenar:
 - Logs de processamento;
 - Resultados gerados pela função Lambda.
 
-
 ## 🔄 Fluxo do Processo
 
 1. O **usuário** envia um **arquivo** para o bucket **S3** (manual ou via AWS CLI).  
@@ -46,7 +45,7 @@ Utilizado para armazenar:
 5. (Opcional) A Lambda pode enviar uma notificação, log ou resposta ao usuário.
 
 
-## 🚀 Benefícios da Arquitetura
+## Benefícios da Arquitetura
 
 - **100% Serverless:** sem necessidade de gerenciar instâncias EC2.  
 - **Alta escalabilidade:** a Lambda processa automaticamente qualquer volume de arquivos.  
@@ -56,7 +55,7 @@ Utilizado para armazenar:
 
 ---
 
-## 🧠 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 | Categoria | Serviço AWS | Função |
 |------------|--------------|--------|
