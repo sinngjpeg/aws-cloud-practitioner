@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Site Estático S3 Free Tier
+
+Resources:
+  MeuSiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "meu-site-estatico-${AWS::AccountId}-${AWS::Region}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MeuSiteBucket
+      PolicyDocument:
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "${MeuSiteBucket}/*"
+
+Outputs:
+  SiteURL:
+    Description: "URL do site estático"
+    Value: !GetAtt MeuSiteBucket.WebsiteURL
+  BucketName:
+    Description: "Nome do bucket S3"
+    Value: !Ref MeuSiteBucket
