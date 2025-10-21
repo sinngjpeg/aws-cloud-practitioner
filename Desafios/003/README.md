@@ -25,8 +25,6 @@ Um sistema completo de hospedagem de site estático que inclui:
 ### Desenvolvimento
 
 - **HTML5**: Estrutura das páginas web
-- **CSS3**: Estilização responsiva e moderna
-- **JavaScript**: Interatividade e funcionalidades dinâmicas
 - **Bash**: Scripts de automação para deploy e gerenciamento
 
 ### Ferramentas
@@ -137,8 +135,6 @@ O arquivo `site-estatico-template.yaml` define:
 
 **index.html**:
 
-- Design responsivo com CSS Grid/Flexbox
-- Animações CSS suaves
 - Informações sobre AWS e Free Tier
 - Links para documentação oficial
 
