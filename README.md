@@ -27,7 +27,7 @@ AWS-Cloud-Practitioner/
 
 Todo o conteúdo detalhado do curso também está organizado em um **GitBook** que você pode acessar abaixo:
 
-🔗 [Meu GitBook - AWS Cloud Practitioner](https://singrid.gitbook.io/sinngjpeg/)
+🔗 [Meu GitBook - AWS Cloud Practitioner](https://singrid.gitbook.io/awsnotes/)
 
 ---
 
@@ -46,6 +46,8 @@ Para ajudar a fixar os conceitos e memorizar o conteúdo estudado, criei alguns 
 
 - [x] Fundamentos da AWS
 - [x] Conceitos de Nuvem
+- [X] IAM
+- [X] IAM Policies
 - [ ] Serviços Essenciais: EC2, S3, RDS, Lambda
 - [ ] Segurança e Conformidade na AWS
 - [ ] Arquitetura de Soluções na Nuvem
