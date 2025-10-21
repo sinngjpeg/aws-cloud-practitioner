@@ -17,9 +17,7 @@ O repositório está organizado da seguinte forma:
 ```
 AWS-Cloud-Practitioner/
 ├─ README.md        <- Este arquivo
-├─ Notas/           <- Resumos e anotações do curso
-├─ Exercicios/      <- Exercícios práticos
-├─ Diagramas/       <- Diagramas da arquitetura AWS
+├─ Desafios/        <- Desafios e exercícios práticos
 └─ GitBook/         <- Link para o GitBook criado
 ````
 

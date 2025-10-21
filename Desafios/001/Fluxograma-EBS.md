@@ -1,17 +1,12 @@
-# ☁️ Arquitetura AWS – Fluxo de Armazenamento e Processamento de Dados
+# Arquitetura AWS – Fluxo de Armazenamento e Processamento de Dados
 
 Este projeto apresenta uma arquitetura simplificada de armazenamento e processamento de dados utilizando os principais serviços da **Amazon Web Services (AWS)**: **EC2**, **EBS** e **RDS**.
 
----
-
-## 🧩 Visão Geral
+## Visão Geral
 
 O diagrama representa o fluxo básico de interação entre um **usuário** e uma **aplicação hospedada na AWS**, desde o envio de um arquivo até seu armazenamento e registro no banco de dados.
 
 ![Diagrama da arquitetura AWS](FLUXOGRAMA-EBS-DESAFIO-001.png)
-
-
----
 
 ## ⚙️ Componentes Principais
 
@@ -48,16 +43,12 @@ Responsável por armazenar informações estruturadas, como:
 4. As informações associadas (como nome, data, status, etc.) são gravadas no **RDS**.  
 5. A EC2 retorna uma **resposta** à aplicação, confirmando o processamento.  
 
----
-
 ## ☁️ Benefícios da Arquitetura
 
 - **Escalabilidade:** os recursos EC2, EBS e RDS podem crescer conforme a demanda.  
 - **Resiliência:** dados armazenados de forma persistente e segura.  
 - **Integração:** serviços AWS se comunicam de forma nativa e gerenciada.  
 - **Custo sob demanda:** paga-se apenas pelo uso dos recursos.
-
----
 
 ## 🧠 Tecnologias Utilizadas
 
