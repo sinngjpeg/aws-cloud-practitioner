@@ -1,10 +1,10 @@
 {
-    "Comment": "Fluxo de Processamento de Pedidos",
+    "Comment": "Fluxo de Processamento de Pedidos usando Step Functions e Lambda",
     "StartAt": "ValidarPedido",
     "States": {
         "ValidarPedido": {
             "Type": "Task",
-            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:validar_pedido",
+            "Resource": "arn:aws:lambda:<REGIAO>:<ID_CONTA>:function:validarPedido",
             "Next": "RegistrarPedido",
             "Catch": [
                 {
@@ -17,7 +17,7 @@
         },
         "RegistrarPedido": {
             "Type": "Task",
-            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:registrar_pedido",
+            "Resource": "arn:aws:lambda:<REGIAO>:<ID_CONTA>:function:registrarPedido",
             "Next": "ProcessarPagamento",
             "Catch": [
                 {
@@ -30,7 +30,7 @@
         },
         "ProcessarPagamento": {
             "Type": "Task",
-            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:processar_pagamento",
+            "Resource": "arn:aws:lambda:<REGIAO>:<ID_CONTA>:function:processarPagamento",
             "Next": "NotificarSucesso",
             "Catch": [
                 {
@@ -43,12 +43,12 @@
         },
         "NotificarSucesso": {
             "Type": "Task",
-            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:notificar_sucesso",
+            "Resource": "arn:aws:lambda:<REGIAO>:<ID_CONTA>:function:NotificarSucesso",
             "End": true
         },
         "NotificarErro": {
             "Type": "Task",
-            "Resource": "arn:aws:lambda:REGIAO:ID_DA_CONTA:function:notificar_erro",
+            "Resource": "arn:aws:lambda:<REGIAO>:<ID_CONTA>:function:NotificarErro",
             "End": true
         }
     }
