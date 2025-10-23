@@ -65,3 +65,23 @@ config
 # Arquivos de backup
 *.bak
 *.backup
+
+# Arquivos sensíveis - NÃO incluir no Git
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Credenciais AWS
+.aws/
+aws-credentials.txt
+credentials.txt
+
+# Logs e arquivos temporários
+*.log
+temp/
+tmp/
+
+# Arquivos específicos do Windows
+Thumbs.db
+desktop.ini

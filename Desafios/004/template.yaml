@@ -1,0 +1,139 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Sistema de monitoramento EC2 com CloudWatch e SNS - Free Tier'
+
+# Parâmetros de entrada
+Parameters:
+  EmailAddress:
+    Type: String
+    Description: 'Endereço de email para receber alertas de CPU'
+    Default: 'seu-email@exemplo.com'
+  
+  KeyPairName:
+    Type: String
+    Description: 'Nome da KeyPair para acesso SSH à instância EC2'
+    Default: 'minha-chave'
+
+Resources:
+  # Security Group - Permite acesso SSH na porta 22
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Security Group para instancia EC2 - permite SSH'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: 'Permite SSH de qualquer IP'
+      Tags:
+        - Key: Name
+          Value: 'MonitoringSecurityGroup'
+
+  # Instância EC2 t2.micro com Amazon Linux 2
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      # AMI do Amazon Linux 2 - SUBSTITUA pela AMI mais recente da sua região
+      ImageId: [AMI-ID-DA-SUA-REGIAO]  # Ex: ami-0abcdef1234567890
+      InstanceType: t2.micro
+      KeyName: !Ref KeyPairName
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      # Script de inicialização - instala stress e cria arquivo de status
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          # Atualizar sistema
+          yum update -y
+          
+          # Instalar pacote stress para testes de CPU
+          yum install -y stress
+          
+          # Criar arquivo de status
+          echo "instância configurada com sucesso" > /home/ec2-user/status.txt
+          chown ec2-user:ec2-user /home/ec2-user/status.txt
+          
+          # Criar script de teste de CPU
+          cat > /home/ec2-user/test-cpu.sh << 'EOF'
+          #!/bin/bash
+          echo "Iniciando teste de CPU por 5 minutos..."
+          stress --cpu 1 --timeout 300s
+          echo "Teste de CPU finalizado"
+          EOF
+          chmod +x /home/ec2-user/test-cpu.sh
+          chown ec2-user:ec2-user /home/ec2-user/test-cpu.sh
+      Tags:
+        - Key: Name
+          Value: 'MonitoredInstance'
+
+  # Tópico SNS para envio de alertas por email
+  AlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: 'AlertTopic'
+      DisplayName: 'Alertas de CPU da Instância EC2'
+
+  # Inscrição no tópico SNS para receber emails
+  EmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: email
+      TopicArn: !Ref AlertTopic
+      Endpoint: !Ref EmailAddress
+
+  # Alarme CloudWatch para monitorar CPU > 70%
+  CPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: '[NOME-DO-ALARME]'  # Ex: EC2-CPU-High-Alert
+      AlarmDescription: 'Alarme disparado quando CPU da instância > 70%'
+      # Métrica a ser monitorada
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      # Período de 5 minutos (300 segundos)
+      Period: 300
+      # Avalia por 2 períodos consecutivos (10 minutos total)
+      EvaluationPeriods: 2
+      # Limite de 70% de CPU
+      Threshold: 70
+      ComparisonOperator: GreaterThanThreshold
+      # Dimensão - especifica qual instância monitorar
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref EC2Instance
+      # Ação quando alarme é disparado - enviar para SNS
+      AlarmActions:
+        - !Ref AlertTopic
+      # Como tratar dados ausentes
+      TreatMissingData: notBreaching
+
+# Saídas do template
+Outputs:
+  InstanceId:
+    Description: 'ID da instância EC2 criada'
+    Value: !Ref EC2Instance
+    Export:
+      Name: !Sub '${AWS::StackName}-InstanceId'
+  
+  InstancePublicIP:
+    Description: 'IP público da instância EC2'
+    Value: !GetAtt EC2Instance.PublicIp
+    Export:
+      Name: !Sub '${AWS::StackName}-PublicIP'
+  
+  SNSTopicArn:
+    Description: 'ARN do tópico SNS para alertas'
+    Value: !Ref AlertTopic
+    Export:
+      Name: !Sub '${AWS::StackName}-SNSTopicArn'
+  
+  AlarmName:
+    Description: 'Nome do alarme CloudWatch'
+    Value: !Ref CPUAlarm
+    Export:
+      Name: !Sub '${AWS::StackName}-AlarmName'
+  
+  SSHCommand:
+    Description: 'Comando para conectar via SSH'
+    Value: !Sub 'ssh -i ${KeyPairName}.pem ec2-user@${EC2Instance.PublicIp}'
