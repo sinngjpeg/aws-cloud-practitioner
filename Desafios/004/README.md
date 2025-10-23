@@ -1,6 +1,6 @@
 # Sistema de Monitoramento EC2 com CloudWatch e SNS
 
-## 📋 Descrição do Projeto
+## Descrição do Projeto
 
 Sistema completo de **monitoramento automático** que demonstra a integração entre serviços AWS para criar uma infraestrutura inteligente. O sistema monitora continuamente uma instância EC2 e envia alertas automáticos por email quando a CPU ultrapassa 70%.
 
@@ -45,7 +45,7 @@ Demonstrar **Infrastructure as Code (IaC)** e **automação prática** usando Cl
 - **Stack**: Gerenciamento unificado de recursos
 - **Parâmetros**: Email e KeyPair configuráveis
 
-## 🚀 Processo de Deploy Realizado
+## Processo de Deploy Realizado
 
 ### **Passo 1: Preparação**
 
