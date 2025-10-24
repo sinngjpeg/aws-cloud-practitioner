@@ -85,3 +85,36 @@ tmp/
 # Arquivos específicos do Windows
 Thumbs.db
 desktop.ini
+
+
+# AWS and temporary files
+*.zip
+*.log
+temp_*
+bucket_name.txt
+object_lambda_arn.txt
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
