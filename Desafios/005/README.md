@@ -7,6 +7,7 @@ Transforme objetos S3 em tempo real sem modificar os dados originais usando AWS 
 Este projeto demonstra como usar **AWS S3 Object Lambda** para transformar arquivos de texto em maiúsculas em tempo real quando acessados através de um access point especial, mantendo os arquivos originais inalterados no S3.
 
 ### Principais Funcionalidades
+
 - ✅ **Transformação em tempo real** - Converte texto para maiúsculas instantaneamente
 - ✅ **Dados originais preservados** - Arquivos fonte permanecem intocados
 - ✅ **Arquitetura serverless** - Usa AWS Lambda para processamento
@@ -31,6 +32,7 @@ Este projeto demonstra como usar **AWS S3 Object Lambda** para transformar arqui
 ## 🚀 Guia Rápido
 
 ### Pré-requisitos
+
 - AWS CLI configurado com permissões apropriadas
 - Conta AWS com acesso ao S3, Lambda e CloudFormation
 - Região: `us-east-1` (recomendada)
@@ -40,7 +42,7 @@ Este projeto demonstra como usar **AWS S3 Object Lambda** para transformar arqui
 ```bash
 # Clone este repositório
 git clone <repository-url>
-cd aws-s3-object-lambda
+cd desafios/005
 
 # Fazer deploy da stack CloudFormation
 aws cloudformation create-stack \
@@ -92,6 +94,7 @@ cd scripts
 ## 🧪 Testes
 
 ### Testes Automatizados
+
 ```bash
 # Executar suíte completa de testes
 scripts/test-simple.bat
@@ -103,12 +106,14 @@ scripts/verificar.bat
 ### Teste Manual
 
 1. **Fazer upload de um arquivo de teste:**
+
 ```bash
 echo "hello world from s3 object lambda" > test.txt
 aws s3 cp test.txt s3://SEU-NOME-DO-BUCKET/test.txt
 ```
 
 2. **Acessar via bucket original (inalterado):**
+
 ```bash
 aws s3api get-object \
   --bucket SEU-NOME-DO-BUCKET \
@@ -120,6 +125,7 @@ cat original-output.txt
 ```
 
 3. **Acessar via Object Lambda (transformado):**
+
 ```bash
 aws s3api get-object \
   --bucket arn:aws:s3-object-lambda:us-east-1:SUA-CONTA:accesspoint/SEU-OBJECT-LAMBDA-AP \
@@ -133,24 +139,20 @@ cat transformed-output.txt
 ## 🔧 Configuração
 
 ### Parâmetros
+
 - **BaseBucketName**: Nome base para o bucket S3 (padrão: `object-lambda-demo`)
 - **LambdaName**: Nome para a função Lambda (padrão: `TransformLambda`)
-
-### Personalização
-Modifique `src/transform_lambda.py` para implementar diferentes transformações:
-- Filtragem de texto
-- Conversão de formato (JSON para CSV)
-- Redação de dados
-- Criptografia de conteúdo
 
 ## 💰 Considerações de Custo
 
 ### AWS Free Tier Incluído
+
 - **S3**: 5GB de armazenamento + 20.000 requisições GET
 - **Lambda**: 1M requisições + 400.000 GB-segundos
 - **CloudWatch**: Logs básicos incluídos
 
 ### Custos Estimados (após free tier)
+
 - **S3 Object Lambda**: $0.0005 por requisição
 - **Lambda**: Baseado no tempo de execução e memória
 - **S3 Storage**: $0.023/GB por mês
@@ -180,18 +182,6 @@ aws cloudformation wait stack-delete-complete \
 - [CloudFormation S3ObjectLambda::AccessPoint](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3objectlambda-accesspoint.html)
 - [Exemplos de Funções Lambda](https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-examples.html)
 
-## 🤝 Contribuindo
-
-1. Faça um fork do repositório
-2. Crie uma branch para sua funcionalidade
-3. Faça suas alterações
-4. Teste completamente
-5. Envie um pull request
-
-## 📄 Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes.
-
 ## ⚠️ Notas Importantes
 
 - Esta demonstração usa a região `us-east-1`
@@ -204,5 +194,3 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para d
 - Veja [SECURITY.md](SECURITY.md) para diretrizes de segurança
 
 ---
-
-**Construído com ❤️ para aprender AWS S3 Object Lambda**

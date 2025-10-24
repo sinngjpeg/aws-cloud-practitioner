@@ -1,0 +1,248 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'S3 Object Lambda Access Point - Transformação de texto em tempo real'
+
+# Parâmetros configuráveis
+Parameters:
+  BaseBucketName:
+    Type: String
+    Description: 'Nome base do bucket S3 (será adicionado sufixo único)'
+    Default: 'object-lambda-demo'
+    AllowedPattern: '^[a-z0-9][a-z0-9-]*[a-z0-9]$'
+    ConstraintDescription: 'Deve conter apenas letras minúsculas, números e hífens'
+  
+  LambdaName:
+    Type: String
+    Description: 'Nome da função Lambda para transformação'
+    Default: 'TransformLambda'
+    AllowedPattern: '^[a-zA-Z0-9-_]+$'
+
+Resources:
+  # Bucket S3 original com versionamento habilitado
+  SourceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${BaseBucketName}-${AWS::AccountId}-${AWS::Region}'
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Project
+          Value: S3ObjectLambdaDemo
+        - Key: Purpose
+          Value: SourceBucket
+
+  # S3 Access Point vinculado ao bucket original
+  SourceAccessPoint:
+    Type: AWS::S3::AccessPoint
+    Properties:
+      Bucket: !Ref SourceBucket
+      Name: !Sub '${BaseBucketName}-access-point'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # IAM Role para execução da função Lambda
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${LambdaName}-ExecutionRole'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: S3ObjectLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # Permissões para S3 Object Lambda
+              - Effect: Allow
+                Action:
+                  - s3-object-lambda:WriteGetObjectResponse
+                Resource: '*'
+              # Permissões para acessar o bucket original
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetObjectAttributes
+                Resource: 
+                  - !Sub 'arn:aws:s3:::${SourceBucket}/*'
+              # Permissões para Access Point
+              - Effect: Allow
+                Action:
+                  - s3:GetAccessPoint
+                  - s3:GetAccessPointPolicy
+                Resource: !GetAtt SourceAccessPoint.Arn
+              # Permissões adicionais para Object Lambda
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !Sub 'arn:aws:s3:::${SourceBucket}'
+
+  # Função Lambda para transformação de texto
+  TransformLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Ref LambdaName
+      Runtime: python3.9
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 60
+      MemorySize: 128
+      Description: 'Converte conteúdo de arquivos de texto para maiúsculas'
+      Code:
+        ZipFile: |
+          import boto3
+          import json
+          import urllib.parse
+          
+          def lambda_handler(event, context):
+              """
+              Função Lambda que intercepta requisições GET do S3 Object Lambda
+              e converte o conteúdo de texto para maiúsculas
+              """
+              
+              # Cliente S3 para fazer a requisição original
+              s3_client = boto3.client('s3')
+              
+              # Extrair informações do evento
+              get_context = event['getObjectContext']
+              route = get_context['outputRoute']
+              token = get_context['outputToken']
+              s3_url = get_context['inputS3Url']
+              
+              print(f"Processando requisição para: {s3_url}")
+              
+              try:
+                  # Fazer requisição GET para o objeto original
+                  response = urllib.request.urlopen(s3_url)
+                  original_content = response.read()
+                  
+                  # Tentar decodificar como texto
+                  try:
+                      text_content = original_content.decode('utf-8')
+                      # Converter para maiúsculas
+                      transformed_content = text_content.upper()
+                      transformed_bytes = transformed_content.encode('utf-8')
+                      
+                      print(f"Texto transformado: {len(transformed_bytes)} bytes")
+                      
+                  except UnicodeDecodeError:
+                      # Se não for texto, retornar conteúdo original
+                      print("Arquivo não é texto, retornando original")
+                      transformed_bytes = original_content
+                  
+                  # Retornar o conteúdo transformado
+                  s3_client.write_get_object_response(
+                      RequestRoute=route,
+                      RequestToken=token,
+                      Body=transformed_bytes,
+                      ContentType='text/plain; charset=utf-8',
+                      Metadata={
+                          'transformed': 'true',
+                          'transformation': 'uppercase'
+                      }
+                  )
+                  
+                  return {
+                      'statusCode': 200,
+                      'body': 'Transformação aplicada com sucesso'
+                  }
+                  
+              except Exception as e:
+                  print(f"Erro na transformação: {str(e)}")
+                  
+                  # Em caso de erro, retornar erro para o cliente
+                  s3_client.write_get_object_response(
+                      RequestRoute=route,
+                      RequestToken=token,
+                      StatusCode=500,
+                      ErrorCode='InternalError',
+                      ErrorMessage=f'Erro na transformação: {str(e)}'
+                  )
+                  
+                  return {
+                      'statusCode': 500,
+                      'body': f'Erro: {str(e)}'
+                  }
+      Tags:
+        - Key: Project
+          Value: S3ObjectLambdaDemo
+
+  # S3 Object Lambda Access Point
+  ObjectLambdaAccessPoint:
+    Type: AWS::S3ObjectLambda::AccessPoint
+    Properties:
+      Name: !Sub '${BaseBucketName}-object-lambda-ap'
+      ObjectLambdaConfiguration:
+        SupportingAccessPoint: !GetAtt SourceAccessPoint.Arn
+        TransformationConfigurations:
+          - Actions:
+              - GetObject
+            ContentTransformation:
+              AwsLambda:
+                FunctionArn: !GetAtt TransformLambda.Arn
+                FunctionPayload: |
+                  {
+                    "transformation": "uppercase"
+                  }
+
+  # Permissão para S3 Object Lambda invocar a função Lambda
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref TransformLambda
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+
+# Outputs com informações dos recursos criados
+Outputs:
+  SourceBucketName:
+    Description: 'Nome do bucket S3 original'
+    Value: !Ref SourceBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-SourceBucket'
+  
+  SourceAccessPointArn:
+    Description: 'ARN do S3 Access Point'
+    Value: !GetAtt SourceAccessPoint.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-SourceAccessPoint'
+  
+  ObjectLambdaAccessPointArn:
+    Description: 'ARN do S3 Object Lambda Access Point'
+    Value: !GetAtt ObjectLambdaAccessPoint.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-ObjectLambdaAccessPoint'
+  
+  TransformLambdaArn:
+    Description: 'ARN da função Lambda de transformação'
+    Value: !GetAtt TransformLambda.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-TransformLambda'
+  
+  TestCommand:
+    Description: 'Comando para testar o Object Lambda Access Point'
+    Value: !Sub |
+      # 1. Upload de arquivo teste:
+      echo "hello world from s3 object lambda" > test.txt
+      aws s3 cp test.txt s3://${SourceBucket}/test.txt
+      
+      # 2. Acesso via Object Lambda (transformado):
+      aws s3api get-object --bucket ${ObjectLambdaAccessPoint.Arn} --key test.txt transformed-output.txt
+      
+      # 3. Verificar resultado:
+      cat transformed-output.txt
