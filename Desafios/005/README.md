@@ -1,23 +1,23 @@
-# AWS S3 Object Lambda - Real-time Text Transformation
+# AWS S3 Object Lambda - Transformação de Texto em Tempo Real
 
-Transform S3 objects in real-time without modifying the original data using AWS S3 Object Lambda Access Points.
+Transforme objetos S3 em tempo real sem modificar os dados originais usando AWS S3 Object Lambda Access Points.
 
-## 🎯 What This Project Does
+## 🎯 O que Este Projeto Faz
 
-This project demonstrates how to use **AWS S3 Object Lambda** to transform text files to uppercase in real-time when accessed through a special access point, while keeping the original files unchanged in S3.
+Este projeto demonstra como usar **AWS S3 Object Lambda** para transformar arquivos de texto em maiúsculas em tempo real quando acessados através de um access point especial, mantendo os arquivos originais inalterados no S3.
 
-### Key Features
-- ✅ **Real-time transformation** - Convert text to uppercase on-the-fly
-- ✅ **Original data preserved** - Source files remain untouched
-- ✅ **Serverless architecture** - Uses AWS Lambda for processing
-- ✅ **Cost-effective** - No data duplication needed
-- ✅ **Infrastructure as Code** - Complete CloudFormation template
+### Principais Funcionalidades
+- ✅ **Transformação em tempo real** - Converte texto para maiúsculas instantaneamente
+- ✅ **Dados originais preservados** - Arquivos fonte permanecem intocados
+- ✅ **Arquitetura serverless** - Usa AWS Lambda para processamento
+- ✅ **Custo-efetivo** - Não há necessidade de duplicação de dados
+- ✅ **Infraestrutura como Código** - Template CloudFormation completo
 
-## 🏗️ Architecture
+## 🏗️ Arquitetura
 
 ```
 ┌─────────────┐    ┌──────────────────┐    ┌─────────────┐
-│   Client    │───▶│ Object Lambda    │───▶│   Lambda    │
+│   Cliente   │───▶│ Object Lambda    │───▶│   Lambda    │
 │             │    │  Access Point    │    │  Function   │
 └─────────────┘    └──────────────────┘    └─────────────┘
                             │                       │
@@ -28,181 +28,181 @@ This project demonstrates how to use **AWS S3 Object Lambda** to transform text 
                    └──────────────────┘    └─────────────┘
 ```
 
-## 🚀 Quick Start
+## 🚀 Guia Rápido
 
-### Prerequisites
-- AWS CLI configured with appropriate permissions
-- AWS account with access to S3, Lambda, and CloudFormation
-- Region: `us-east-1` (recommended)
+### Pré-requisitos
+- AWS CLI configurado com permissões apropriadas
+- Conta AWS com acesso ao S3, Lambda e CloudFormation
+- Região: `us-east-1` (recomendada)
 
-### 1. Deploy Infrastructure
+### 1. Fazer Deploy da Infraestrutura
 
 ```bash
-# Clone this repository
+# Clone este repositório
 git clone <repository-url>
 cd aws-s3-object-lambda
 
-# Deploy the CloudFormation stack
+# Fazer deploy da stack CloudFormation
 aws cloudformation create-stack \
   --stack-name s3-object-lambda-demo \
   --template-body file://template.yaml \
   --capabilities CAPABILITY_NAMED_IAM \
-  --parameters ParameterKey=BaseBucketName,ParameterValue=my-demo-bucket \
+  --parameters ParameterKey=BaseBucketName,ParameterValue=meu-bucket-demo \
                ParameterKey=LambdaName,ParameterValue=TransformLambda \
   --region us-east-1
 ```
 
-### 2. Wait for Deployment
+### 2. Aguardar o Deploy
 
 ```bash
-# Monitor deployment progress
+# Monitorar progresso do deploy
 aws cloudformation wait stack-create-complete \
   --stack-name s3-object-lambda-demo \
   --region us-east-1
 ```
 
-### 3. Test the Transformation
+### 3. Testar a Transformação
 
 ```bash
-# Run the automated test
+# Executar teste automatizado
 cd scripts
 ./test-simple.bat
 ```
 
-## 📁 Project Structure
+## 📁 Estrutura do Projeto
 
 ```
 ├── src/
-│   └── transform_lambda.py     # Lambda function source code
+│   └── transform_lambda.py     # Código fonte da função Lambda
 ├── scripts/
-│   ├── deploy.bat             # Deployment script
-│   ├── test-simple.bat        # Complete test script
-│   ├── check-status.bat       # Check stack status
-│   └── verificar.bat          # Quick verification
+│   ├── deploy.bat             # Script de deploy
+│   ├── test-simple.bat        # Script de teste completo
+│   ├── check-status.bat       # Verificar status da stack
+│   └── verificar.bat          # Verificação rápida
 ├── examples/
-│   ├── test.txt               # Sample input file
-│   ├── original-test-output.txt   # Original content
-│   └── transformed-test-output.txt # Transformed content
+│   ├── test.txt               # Arquivo de exemplo
+│   ├── original-test-output.txt   # Conteúdo original
+│   └── transformed-test-output.txt # Conteúdo transformado
 ├── images/
 │   └── infrastructure-compose-desafio-005.png
-├── template.yaml              # CloudFormation template
-└── README.md                  # This file
+├── template.yaml              # Template CloudFormation
+└── README.md                  # Este arquivo
 ```
 
-## 🧪 Testing
+## 🧪 Testes
 
-### Automated Testing
+### Testes Automatizados
 ```bash
-# Run complete test suite
+# Executar suíte completa de testes
 scripts/test-simple.bat
 
-# Quick verification
+# Verificação rápida
 scripts/verificar.bat
 ```
 
-### Manual Testing
+### Teste Manual
 
-1. **Upload a test file:**
+1. **Fazer upload de um arquivo de teste:**
 ```bash
 echo "hello world from s3 object lambda" > test.txt
-aws s3 cp test.txt s3://YOUR-BUCKET-NAME/test.txt
+aws s3 cp test.txt s3://SEU-NOME-DO-BUCKET/test.txt
 ```
 
-2. **Access via original bucket (unchanged):**
+2. **Acessar via bucket original (inalterado):**
 ```bash
 aws s3api get-object \
-  --bucket YOUR-BUCKET-NAME \
+  --bucket SEU-NOME-DO-BUCKET \
   --key test.txt \
   original-output.txt
 
 cat original-output.txt
-# Output: hello world from s3 object lambda
+# Saída: hello world from s3 object lambda
 ```
 
-3. **Access via Object Lambda (transformed):**
+3. **Acessar via Object Lambda (transformado):**
 ```bash
 aws s3api get-object \
-  --bucket arn:aws:s3-object-lambda:us-east-1:ACCOUNT:accesspoint/OBJECT-LAMBDA-AP \
+  --bucket arn:aws:s3-object-lambda:us-east-1:SUA-CONTA:accesspoint/SEU-OBJECT-LAMBDA-AP \
   --key test.txt \
   transformed-output.txt
 
 cat transformed-output.txt
-# Output: HELLO WORLD FROM S3 OBJECT LAMBDA
+# Saída: HELLO WORLD FROM S3 OBJECT LAMBDA
 ```
 
-## 🔧 Configuration
+## 🔧 Configuração
 
-### Parameters
-- **BaseBucketName**: Base name for the S3 bucket (default: `object-lambda-demo`)
-- **LambdaName**: Name for the Lambda function (default: `TransformLambda`)
+### Parâmetros
+- **BaseBucketName**: Nome base para o bucket S3 (padrão: `object-lambda-demo`)
+- **LambdaName**: Nome para a função Lambda (padrão: `TransformLambda`)
 
-### Customization
-Modify `src/transform_lambda.py` to implement different transformations:
-- Text filtering
-- Format conversion (JSON to CSV)
-- Data redaction
-- Content encryption
+### Personalização
+Modifique `src/transform_lambda.py` para implementar diferentes transformações:
+- Filtragem de texto
+- Conversão de formato (JSON para CSV)
+- Redação de dados
+- Criptografia de conteúdo
 
-## 💰 Cost Considerations
+## 💰 Considerações de Custo
 
-### AWS Free Tier Included
-- **S3**: 5GB storage + 20,000 GET requests
-- **Lambda**: 1M requests + 400,000 GB-seconds
-- **CloudWatch**: Basic logs included
+### AWS Free Tier Incluído
+- **S3**: 5GB de armazenamento + 20.000 requisições GET
+- **Lambda**: 1M requisições + 400.000 GB-segundos
+- **CloudWatch**: Logs básicos incluídos
 
-### Estimated Costs (after free tier)
-- **S3 Object Lambda**: $0.0005 per request
-- **Lambda**: Based on execution time and memory
-- **S3 Storage**: $0.023/GB per month
+### Custos Estimados (após free tier)
+- **S3 Object Lambda**: $0.0005 por requisição
+- **Lambda**: Baseado no tempo de execução e memória
+- **S3 Storage**: $0.023/GB por mês
 
-## 🧹 Cleanup
+## 🧹 Limpeza
 
-To avoid ongoing charges, delete all resources:
+Para evitar cobranças contínuas, delete todos os recursos:
 
 ```bash
-# Empty the S3 bucket first
-aws s3 rm s3://YOUR-BUCKET-NAME --recursive
+# Esvaziar o bucket S3 primeiro
+aws s3 rm s3://SEU-NOME-DO-BUCKET --recursive
 
-# Delete the CloudFormation stack
+# Deletar a stack CloudFormation
 aws cloudformation delete-stack \
   --stack-name s3-object-lambda-demo \
   --region us-east-1
 
-# Wait for deletion to complete
+# Aguardar conclusão da deleção
 aws cloudformation wait stack-delete-complete \
   --stack-name s3-object-lambda-demo \
   --region us-east-1
 ```
 
-## 📚 Learn More
+## 📚 Saiba Mais
 
-- [AWS S3 Object Lambda Documentation](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transforming-objects.html)
+- [Documentação AWS S3 Object Lambda](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transforming-objects.html)
 - [CloudFormation S3ObjectLambda::AccessPoint](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3objectlambda-accesspoint.html)
-- [Lambda Function Examples](https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-examples.html)
+- [Exemplos de Funções Lambda](https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-examples.html)
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+1. Faça um fork do repositório
+2. Crie uma branch para sua funcionalidade
+3. Faça suas alterações
+4. Teste completamente
+5. Envie um pull request
 
-## 📄 License
+## 📄 Licença
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes.
 
-## ⚠️ Important Notes
+## ⚠️ Notas Importantes
 
-- This demo uses `us-east-1` region
-- **Replace all placeholders** with your actual AWS resource names after deployment
-- Use `scripts/setup-variables.bat` to get your resource names automatically
-- Ensure your AWS credentials have sufficient permissions
-- The Lambda function processes text files only
-- Binary files are returned unchanged
-- Always test in a development environment first
-- See [SECURITY.md](SECURITY.md) for security guidelines
+- Esta demonstração usa a região `us-east-1`
+- **Substitua todos os placeholders** pelos nomes reais dos seus recursos AWS após o deploy
+- Use `scripts/setup-variables.bat` para obter os nomes dos seus recursos automaticamente
+- Certifique-se de que suas credenciais AWS têm permissões suficientes
+- A função Lambda processa apenas arquivos de texto
+- Arquivos binários são retornados inalterados
+- Sempre teste em um ambiente de desenvolvimento primeiro
+- Veja [SECURITY.md](SECURITY.md) para diretrizes de segurança
 
 ---
 
-**Built with ❤️ for learning AWS S3 Object Lambda**
+**Construído com ❤️ para aprender AWS S3 Object Lambda**
